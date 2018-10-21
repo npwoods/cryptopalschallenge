@@ -631,55 +631,9 @@ namespace CryptoPalsChallenge
             Console.Write(Encoding.ASCII.GetString(decodedMessage).Replace("\0", ""));
         }
 
-        private static byte[] StripPkcs7Padding(byte[] plainText)
-        {
-            byte padding = plainText[plainText.Length - 1];
-            for (int i = 1; i < padding; i++)
-            {
-                if (plainText[plainText.Length - 1 - i] != padding)
-                {
-                    throw new Exception("Bad padding");
-                }
-            }
-            return Utility.Pluck(plainText, 0, plainText.Length - padding);
-        }
-
-        static byte[] Challenge16_Func1(byte[] s, byte[] keyBytes)
-        {
-            byte[] quotedS = Utility.Concat((from b in s
-                                     select (b == ';' || b == '=' || b == '%')
-                                         ? new byte[]{ (byte)'%', (byte)('0' + ((b >> 4) & 0x0F)), (byte)('0' + ((b >> 0) & 0x0F)) }
-                                         : new byte[]{ b }).ToArray());
-
-            byte[] concatenated = Utility.Concat(
-                Encoding.ASCII.GetBytes("comment1=cooking%20MCs;userdata="),
-                quotedS,
-                Encoding.ASCII.GetBytes(";comment2=%20like%20a%20pound%20of%20bacon"));
-
-            byte[] padded = Pkcs7(concatenated, 16);
-
-            return Encrypt(padded, keyBytes, null, CipherMode.CBC);
-        }
-
-        static void Challenge16()
-        {
-            byte[] keyBytes = Utility.CreateRandomKey();
-
-            string s = "foo=bar;admin=true";
-
-            byte[] cipherText = Challenge16_Func1(
-                Encoding.ASCII.GetBytes(s),
-                keyBytes);
-            string s1 = "ICE ICE BABY\x04\x04\x04\x04";
-            string s2 = "ICE ICE BABY\x05\x05\x05\x05";
-            string s3 = "ICE ICE BABY\x01\x02\x03\x04";
-            byte[] results = StripPkcs7Padding(Encoding.ASCII.GetBytes(s3));
-            throw new NotImplementedException();
-        }
-
         static void Main(string[] args)
         {
-            Challenge17.Run();
+            Challenge16.Run();
             Console.ReadLine();            
         }
     }
