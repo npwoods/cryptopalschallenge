@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CryptoPalsChallenge
 {
+    /// <seealso cref="https://cryptopals.com/sets/3/challenges/19"/>
     public static class Challenge19
     {
         // A fixed random key
