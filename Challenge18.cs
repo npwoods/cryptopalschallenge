@@ -7,35 +7,40 @@ namespace CryptoPalsChallenge
 {
     public static class Challenge18
     {
-        public static void Run()
+        public static byte[] CtrEncodeDecode(byte[] input, byte[] keyBytes, long nonce = 0)
         {
             const int blockSize = 16;
 
-            string s = "L77na/nrFsKvynd6HzOoG7GHTLXsTVu9qvY/2syLXzhPweyyMTJULu/6/kXX0KSvoOLSFQ==";
-            byte[] cipherText = Convert.FromBase64String(s);
-
-            long nonce = 0;
             byte[] iv = new byte[blockSize];
-            byte[] result = new byte[cipherText.Length];
+            byte[] result = new byte[input.Length];
 
-            for (int i = 0; i < cipherText.Length; i += blockSize)
+            for (int i = 0; i < input.Length; i += blockSize)
             {
                 byte[] counter = Utility.Concat(
                     BitConverter.GetBytes(nonce),
                     BitConverter.GetBytes(i / blockSize));
 
-                string key = "YELLOW SUBMARINE";
                 byte[] encryptedCounter = Utility.Encrypt(
                     counter,
-                    Encoding.ASCII.GetBytes(key),
+                    keyBytes,
                     iv,
                     CipherMode.CBC);
 
-                for (int j = 0; j < blockSize && i + j < cipherText.Length; j++)
+                for (int j = 0; j < blockSize && i + j < input.Length; j++)
                 {
-                    result[i + j] = (byte)(cipherText[i + j] ^ encryptedCounter[j]);
+                    result[i + j] = (byte)(input[i + j] ^ encryptedCounter[j]);
                 }
             }
+            return result;
+        }
+
+        public static void Run()
+        {
+            string s = "L77na/nrFsKvynd6HzOoG7GHTLXsTVu9qvY/2syLXzhPweyyMTJULu/6/kXX0KSvoOLSFQ==";
+            byte[] cipherText = Convert.FromBase64String(s);
+            byte[] keyBytes = Encoding.ASCII.GetBytes("YELLOW SUBMARINE");
+
+            byte[] result = CtrEncodeDecode(cipherText, keyBytes);
 
             Console.WriteLine(Encoding.ASCII.GetString(result));
         }

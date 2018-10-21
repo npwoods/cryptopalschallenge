@@ -66,6 +66,22 @@ namespace CryptoPalsChallenge
             return result;
         }
 
+        public static IEnumerable<T> Stagger<T>(Span<T> buffer, int chunkSize, int position)
+        {
+            var result = new List<T>();
+            for (int i = position; i < buffer.Length; i += chunkSize)
+            {
+                result.Add(buffer[i]);
+            }
+            return result;
+        }
+
+        public static IEnumerable<T> Stagger<T>(T[] buffer, int chunkSize, int position)
+        {
+            Span<T> span = buffer;
+            return Stagger(span, chunkSize, position);
+        }
+
         public static byte[] Encrypt(byte[] plainText, byte[] keyBytes, byte[] iv, CipherMode cipherMode)
         {
             using (var aes = Aes.Create())

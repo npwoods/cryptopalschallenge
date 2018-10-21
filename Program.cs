@@ -78,22 +78,6 @@ namespace CryptoPalsChallenge
                 : null;
         }
 
-        private static IEnumerable<T> Stagger<T>(Span<T> buffer, int chunkSize, int position)
-        {
-            var result = new List<T>();
-            for (int i = position; i < buffer.Length; i += chunkSize)
-            {
-                result.Add(buffer[i]);
-            }
-            return result;
-        }
-
-        private static IEnumerable<T> Stagger<T>(T[] buffer, int chunkSize, int position)
-        {
-            Span<T> span = buffer;
-            return Stagger(span, chunkSize, position);
-        }
-
         static void Challenge4()
         {
             string[] textArray = Utility.GetResource("4.txt").Split('\r', '\n');
@@ -151,7 +135,7 @@ namespace CryptoPalsChallenge
                 possibleXors[i] = new List<PossibleXor>();
                 for (int xor = 0x00; xor <= 0xFF; xor++)
                 {
-                    var stag = Stagger<byte>(cipherText, keySize, i);
+                    var stag = Utility.Stagger<byte>(cipherText, keySize, i);
                     string s = SingleCharacterXor(stag, (byte)xor);
                     if (s != null)
                     {
@@ -278,7 +262,7 @@ namespace CryptoPalsChallenge
                 int dist = 0;
                 for (int j = 0; j < 16; j++)
                 {
-                    dist += Stagger(cipherTexts[i], 16, j).Distinct().Count();
+                    dist += Utility.Stagger(cipherTexts[i], 16, j).Distinct().Count();
                 }
                 distances[i] = dist;
             }
@@ -386,7 +370,7 @@ namespace CryptoPalsChallenge
                 int dist = 0;
                 for (int j = 0; j < 16; j++)
                 {
-                    dist += Stagger(cipherText, 16, j).Distinct().Count();
+                    dist += Utility.Stagger(cipherText, 16, j).Distinct().Count();
                 }
 
                 var predictedCipherMode = dist > 200 ? CipherMode.CBC : CipherMode.ECB;
@@ -475,7 +459,7 @@ namespace CryptoPalsChallenge
             int dist = 0;
             for (int j = 0; j < keySize; j++)
             {
-                dist += Stagger(zeroCipherText, keySize, j).Distinct().Count();
+                dist += Utility.Stagger(zeroCipherText, keySize, j).Distinct().Count();
             }
             bool isECB = dist <= 200;
             if (!isECB)
@@ -633,7 +617,7 @@ namespace CryptoPalsChallenge
 
         static void Main(string[] args)
         {
-            Challenge18.Run();
+            Challenge19.Run();
             Console.ReadLine();            
         }
     }

@@ -10,6 +10,7 @@
     <None Remove="Resources\10.txt" />
     <None Remove="Resources\12.txt" />
     <None Remove="Resources\17.txt" />
+    <None Remove="Resources\19.txt" />
     <None Remove="Resources\4.txt" />
     <None Remove="Resources\6.txt" />
     <None Remove="Resources\7.txt" />
@@ -21,6 +22,7 @@
     <EmbeddedResource Include="Resources\10.txt" />
     <EmbeddedResource Include="Resources\12.txt" />
     <EmbeddedResource Include="Resources\17.txt" />
+    <EmbeddedResource Include="Resources\19.txt" />
     <EmbeddedResource Include="Resources\4.txt" />
     <EmbeddedResource Include="Resources\6.txt" />
     <EmbeddedResource Include="Resources\7.txt" />
