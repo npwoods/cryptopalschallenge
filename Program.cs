@@ -633,7 +633,7 @@ namespace CryptoPalsChallenge
 
         static void Main(string[] args)
         {
-            Challenge16.Run();
+            Challenge18.Run();
             Console.ReadLine();            
         }
     }
