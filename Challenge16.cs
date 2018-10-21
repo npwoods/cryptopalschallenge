@@ -69,24 +69,24 @@ namespace CryptoPalsChallenge
 
         public static void Run()
         {
+            byte[] targetString = Encoding.ASCII.GetBytes(";admin=true;");
+
+            // Calculate padding and fillter
             const int blockSize = 16;
             int prefixLength = Encoding.ASCII.GetBytes(PREFIX_STRING).Length;
             int prefixBlocks = prefixLength / blockSize;
             int paddingLength = prefixLength - prefixBlocks * blockSize;
-
-            byte[] s1 = Encoding.ASCII.GetBytes(";admin=true;");
-            byte[] s2 = Escape(s1).ToArray();
+            byte[] padding = Repeat((byte)'x', paddingLength);
+            byte[] filler = Repeat((byte)'_', targetString.Length);
 
             // Create the cipher text that we're trying to manipulate
-            byte[] plainText = Utility.Concat(
-                Repeat((byte) '_', paddingLength),
-                s1);
+            byte[] plainText = Utility.Concat(padding, filler);
             byte[] cipherText = Func1(plainText);
 
             // Tweak the ciphertext
-            for (int i = 0; i < s1.Length; i++)
+            for (int i = 0; i < targetString.Length; i++)
             {
-                cipherText[prefixLength + paddingLength - blockSize + i] ^= (byte) (s1[i] ^ s2[i]);
+                cipherText[prefixLength + paddingLength - blockSize + i] ^= (byte) (filler[i] ^ targetString[i]);
             }
 
             // Attempt it!
