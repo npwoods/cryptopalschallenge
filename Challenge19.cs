@@ -68,16 +68,19 @@ namespace CryptoPalsChallenge
             return result;
         }
 
-        public static void Run()
+        public static byte[][] CtrEncodeBase64Strings(string text)
         {
             // "Encrypted" ciphertext
-            byte[][] cipherTexts = Utility.GetResource("19.txt")
+            return text
                 .Split('\r', '\n')
                 .Select(Convert.FromBase64String)
                 .Where(a => a.Length > 0)
                 .Select(a => Challenge18.CtrEncodeDecode(a, _keyBytes))
                 .ToArray();
+        }
 
+        public static byte[] CrackXor(byte[][] cipherTexts)
+        {
             // We're treating decrypting as nothing more than applying a XOR; we deduced the value
             byte[] xor = new byte[cipherTexts.Max(a => a.Length)];
 
@@ -91,8 +94,19 @@ namespace CryptoPalsChallenge
                                          .Sum()
                                   select (candidate, scoreSum)).OrderByDescending(x => x.scoreSum);
 
-                xor[i] = (byte) candidates.First().candidate;
+                xor[i] = (byte)candidates.First().candidate;
             }
+
+            return xor;
+        }
+
+        public static void Run()
+        {
+            // "Encrypted" ciphertext
+            byte[][] cipherTexts = CtrEncodeBase64Strings(Utility.GetResource("19.txt"));
+
+            // We're treating decrypting as nothing more than applying a XOR; we deduced the value
+            byte[] xor = CrackXor(cipherTexts);
 
             // Second pass, we looked at the output and tweaked it
             xor[0] = 0xCA;

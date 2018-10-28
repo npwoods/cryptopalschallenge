@@ -11,6 +11,7 @@ namespace CryptoPalsChallenge
     public static class Utility
     {
         private static Random _random = new Random();
+        private static Lazy<HashSet<string>> _dictionary = new Lazy<HashSet<string>>(BuildDictionary);
 
         /// <summary>
         /// Reads a resource
@@ -29,7 +30,10 @@ namespace CryptoPalsChallenge
         {
             return _random.Next();
         }
-
+        public static int Random(int x)
+        {
+            return Random() % x;
+        }
 
         public static byte[] CreateRandomKey()
         {
@@ -57,6 +61,11 @@ namespace CryptoPalsChallenge
         {
             IEnumerable<T[]> enumerable = arrays;
             return Concat(enumerable);
+        }
+
+        public static T[] Dupe<T>(T[] array)
+        {
+            return Concat(array);
         }
 
         public static T[] Pluck<T>(T[] array, int position, int length)
@@ -138,5 +147,46 @@ namespace CryptoPalsChallenge
             }
         }
 
+        private static HashSet<string> BuildDictionary()
+        {
+            // Not sure what is up with this dictionary, but it requires tweaks
+            var augmentations = new string[]
+            {
+                "/",
+                "are",
+                "came",
+                "cuz"
+            };
+            var substitutions = new Dictionary<string, string>
+            {
+                {"i", "I"},
+                {"TO", "to"},
+                {"BUT", "but"}
+            };
+
+            IEnumerable<string> words = from word in GetResource("Dictionary.txt").Split('\r', '\n').Concat(augmentations)
+                                        let substWord = substitutions.ContainsKey(word) ? substitutions[word] : word
+                                        where !string.IsNullOrWhiteSpace(substWord)
+                                        select substWord;
+            return new HashSet<string>(words);
+        }
+
+        public static bool IsWord(string word)
+        {
+            bool success = InternalIsWord(word) || InternalIsWord(word.ToLowerInvariant());
+
+            // We love 90's rap - calibrate accordingly
+            if (!success && word.EndsWith("n'"))
+            {
+                string newWord = word.Substring(0, word.Length - 2) + "ng";
+                success = InternalIsWord(newWord) || InternalIsWord(newWord.ToLowerInvariant());
+            }
+            return success;
+        }
+
+        private static bool InternalIsWord(string word)
+        {
+            return _dictionary.Value.Contains(word);
+        }
     }
 }

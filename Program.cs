@@ -617,7 +617,7 @@ namespace CryptoPalsChallenge
 
         static void Main(string[] args)
         {
-            Challenge19.Run();
+            Challenge20.Run();
             Console.ReadLine();            
         }
     }

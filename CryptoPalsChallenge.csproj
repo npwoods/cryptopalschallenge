@@ -11,11 +11,13 @@
     <None Remove="Resources\12.txt" />
     <None Remove="Resources\17.txt" />
     <None Remove="Resources\19.txt" />
+    <None Remove="Resources\20.txt" />
     <None Remove="Resources\4.txt" />
     <None Remove="Resources\6.txt" />
     <None Remove="Resources\7.txt" />
     <None Remove="Resources\8.txt" />
     <None Remove="Resources\BaconIpsum.txt" />
+    <None Remove="Resources\Dictionary.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,11 +25,13 @@
     <EmbeddedResource Include="Resources\12.txt" />
     <EmbeddedResource Include="Resources\17.txt" />
     <EmbeddedResource Include="Resources\19.txt" />
+    <EmbeddedResource Include="Resources\20.txt" />
     <EmbeddedResource Include="Resources\4.txt" />
     <EmbeddedResource Include="Resources\6.txt" />
     <EmbeddedResource Include="Resources\7.txt" />
     <EmbeddedResource Include="Resources\8.txt" />
     <EmbeddedResource Include="Resources\BaconIpsum.txt" />
+    <EmbeddedResource Include="Resources\Dictionary.txt" />
   </ItemGroup>
 
   <ItemGroup>
